@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" name="MyApp">
+    <Appenders>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d %p %c{1.} [%t] %m%n"/>
+        </Console>
+
+        <Async name="ASYNC_console" includeLocation="true">
+            <AppenderRef ref="STDOUT" />
+        </Async>
+    </Appenders>
+
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="ASYNC_console"/>
+        </Root>
+    </Loggers>
+</Configuration>
