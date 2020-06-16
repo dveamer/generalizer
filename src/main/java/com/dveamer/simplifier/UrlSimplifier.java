@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class UrlSimplifier implements Simplifier {
+public class UrlSimplifier implements Simplifier<String> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

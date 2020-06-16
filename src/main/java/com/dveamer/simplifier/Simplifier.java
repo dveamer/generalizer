@@ -1,6 +1,6 @@
 package com.dveamer.simplifier;
 
-public interface Simplifier {
+public interface Simplifier<T> {
 
-    String simplify(String path);
+    String simplify(T path);
 }
