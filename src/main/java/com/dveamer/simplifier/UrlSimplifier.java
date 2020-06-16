@@ -48,6 +48,8 @@ public class UrlSimplifier implements Simplifier {
             return fullPathMap.get(searchablePath).getFullPath();
         }
 
+        logger.debug("searching.. {}", path);
+
         return find(searchableWords).getFullPath();
     }
 
@@ -71,7 +73,7 @@ public class UrlSimplifier implements Simplifier {
         }
 
         List<String> searchableWords = words.stream()
-                .map(s->words.contains(s)? s : Constants.SYMBOL_VARIABLE)
+                .map(s->wordSet.contains(s)? s : Constants.SYMBOL_VARIABLE)
                 .collect(Collectors.toList());
 
         searchableWords.set(words.size()-1, lastWord + extension);
@@ -84,12 +86,18 @@ public class UrlSimplifier implements Simplifier {
 
     private List<String> makeSearchableWordsWithoutExtension(List<String> words) {
         return words.stream()
-                .map(s->words.contains(s)? s : Constants.SYMBOL_VARIABLE)
+                .map(s->wordSet.contains(s)? s : Constants.SYMBOL_VARIABLE)
                 .collect(Collectors.toList());
     }
 
     private FullPath find(List<String> searchableWords) {
-        return find(searchableWords, 0, SubPath.ZERO);
+        SubPath firstSubPath = SubPath.createSubPath(searchableWords, 0);
+        FullPath fullPath = find0(searchableWords, firstSubPath);
+        if(fullPath!=null) {
+            return fullPath;
+        }
+
+        throw new NoSuchElementException("Not Found : " + searchableWords);
     }
 
     private FullPath find(List<String> searchableWords, int index, SubPath previousSubPath) {
@@ -108,16 +116,31 @@ public class UrlSimplifier implements Simplifier {
         throw new NoSuchElementException("Not Found : " + subPath + " / " + searchableWords);
     }
 
+    private FullPath find0(List<String> searchableWords, SubPath subPath) {
+        if(subPath.isLast()) {
+            return findFullPathOfLastSubPath(subPath);
+        }
+
+        FullPath fullPath = null;
+        if(subPathSet.contains(subPath)) {
+            SubPath nextSubPath = SubPath.createSubPath(searchableWords, subPath.getIndex()+1);
+            fullPath = find0(searchableWords, nextSubPath);
+            if(fullPath!=null) {
+                return fullPath;
+            }
+        }
+
+        // TODO variable 처리할 때 extension 고려 필요.
+        SubPath nextSubPath = SubPath.createVariableSubPath(searchableWords, subPath.getIndex()+1);
+        return find0(searchableWords, nextSubPath);
+    }
+
     private FullPath findFullPathOfLastSubPath(SubPath lastSubPath) {
         FullPath fullPath = lastSubPathMap.get(lastSubPath);
         if(fullPath != null) {
             return fullPath;
         }
-        fullPath = lastSubPathMap.get(lastSubPath.variableSubPath());
-        if(fullPath != null) {
-            return fullPath;
-        }
-        throw new NoSuchElementException("Not Found : " + lastSubPath);
+        return lastSubPathMap.get(lastSubPath.variableSubPath());
     }
 
 

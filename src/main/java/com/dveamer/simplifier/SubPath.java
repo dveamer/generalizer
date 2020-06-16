@@ -1,12 +1,11 @@
 package com.dveamer.simplifier;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class SubPath {
 
-    private final String leftPath;
+    private final List<String> leftWords;
     private final String word;
     private final int index;
     private final int size;
@@ -14,37 +13,68 @@ public class SubPath {
     static SubPath ZERO = new SubPath();
 
     private SubPath() {
-        this.leftPath = Constants.SYMBOL_EMPTY;
+        this.leftWords = Collections.emptyList();
         this.word = Constants.SYMBOL_EMPTY;
         this.index = -1;
         this.size = -1;
     }
 
-    private SubPath(String leftPath, String word, int index, int size) {
-        this.leftPath = leftPath;
+    private SubPath(List<String> leftWords, String word, int index, int size) {
+        this.leftWords = leftWords;
         this.word = word;
         this.index = index;
         this.size = size;
     }
 
     static SubPath create(List<String> words, int index, SubPath previousSubPath) {
-        if(previousSubPath==ZERO) {
+        if(index == 0) {
             return new SubPath(
-                    Constants.SYMBOL_EMPTY,
+                    Collections.emptyList(),
                     words.get(index),
                     index,
                     words.size()
             );
         }
 
-        String leftPath = Constants.SYMBOL_EMPTY;
-        if(previousSubPath.leftPath != Constants.SYMBOL_EMPTY) {
-            leftPath = previousSubPath.leftPath + Constants.SYMBOL_PATH_DELIMITER;
+        return new SubPath(
+                words.subList(0, index),
+                words.get(index),
+                index,
+                words.size()
+        );
+    }
+
+    static SubPath createSubPath(List<String> words, int index) {
+        if(index == 0) {
+            return new SubPath(
+                    Collections.emptyList(),
+                    words.get(index),
+                    index,
+                    words.size()
+            );
         }
 
         return new SubPath(
-                leftPath + previousSubPath.word,
+                words.subList(0, index),
                 words.get(index),
+                index,
+                words.size()
+        );
+    }
+
+    static SubPath createVariableSubPath(List<String> words, int index) {
+        if(index == 0) {
+            return new SubPath(
+                    Collections.emptyList(),
+                    Constants.SYMBOL_VARIABLE,
+                    index,
+                    words.size()
+            );
+        }
+
+        return new SubPath(
+                words.subList(0, index),
+                Constants.SYMBOL_VARIABLE,
                 index,
                 words.size()
         );
@@ -66,36 +96,40 @@ public class SubPath {
 
     SubPath variableSubPath() {
         return new SubPath(
-                leftPath,
+                leftWords,
                 Constants.SYMBOL_VARIABLE,
                 index,
                 size
         );
     }
 
+    public int getIndex() {
+        return index;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SubPath piece = (SubPath) o;
-        return index == piece.index &&
-                size == piece.size &&
-                leftPath.equals(piece.leftPath) &&
-                word.equals(piece.word);
+        SubPath subPath = (SubPath) o;
+        return index == subPath.index &&
+                size == subPath.size &&
+                leftWords.equals(subPath.leftWords) &&
+                word.equals(subPath.word);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(leftPath, word, index, size);
+        return Objects.hash(leftWords, word, index, size);
     }
 
     @Override
     public String toString() {
         return "SubPath{" +
-                "leftPath='" + leftPath + '\'' +
-                ", word='" + word + '\'' +
+                "path='" + leftWords.stream().collect(Collectors.joining(Constants.SYMBOL_PATH_DELIMITER)) + Constants.SYMBOL_PATH_DELIMITER + word + '\'' +
                 ", index=" + index +
                 ", size=" + size +
                 '}';
     }
+
 }
