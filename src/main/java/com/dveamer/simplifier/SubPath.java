@@ -26,7 +26,9 @@ public class SubPath {
         this.size = size;
     }
 
-    static SubPath create(List<String> words, int index, SubPath previousSubPath) {
+    static SubPath createSubPath(List<String> words, SubPath previousSubPath) {
+        int index = previousSubPath.getIndex()+1;
+
         if(index == 0) {
             return new SubPath(
                     Collections.emptyList(),
@@ -36,47 +38,22 @@ public class SubPath {
             );
         }
 
+        List<String> leftPath = words.subList(0, index);
+        leftPath.set(index-1, previousSubPath.word);
         return new SubPath(
-                words.subList(0, index),
+                leftPath,
                 words.get(index),
                 index,
                 words.size()
         );
     }
 
-    static SubPath createSubPath(List<String> words, int index) {
-        if(index == 0) {
-            return new SubPath(
-                    Collections.emptyList(),
-                    words.get(index),
-                    index,
-                    words.size()
-            );
-        }
-
+    static SubPath createCustomLastSubPath(List<String> words, SubPath lastSubPath, String customizedWord) {
         return new SubPath(
-                words.subList(0, index),
-                words.get(index),
-                index,
-                words.size()
-        );
-    }
-
-    static SubPath createVariableSubPath(List<String> words, int index) {
-        if(index == 0) {
-            return new SubPath(
-                    Collections.emptyList(),
-                    Constants.SYMBOL_VARIABLE,
-                    index,
-                    words.size()
-            );
-        }
-
-        return new SubPath(
-                words.subList(0, index),
-                Constants.SYMBOL_VARIABLE,
-                index,
-                words.size()
+                lastSubPath.leftWords,
+                customizedWord,
+                lastSubPath.index,
+                lastSubPath.size
         );
     }
 
@@ -84,13 +61,13 @@ public class SubPath {
         SubPath subPath = ZERO;
         List<SubPath> subPaths = new ArrayList<>(words.size());
         for(int i=0; i< words.size(); i++) {
-            subPath = create(words, i, subPath);
+            subPath = createSubPath(words, subPath);
             subPaths.add(subPath);
         }
         return subPaths;
     }
 
-    boolean isLast() {
+    boolean isLastNode() {
         return index == size - 1;
     }
 

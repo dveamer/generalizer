@@ -1,5 +1,8 @@
 package com.dveamer.simplifier;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -7,13 +10,16 @@ import java.util.stream.Collectors;
 
 public class PathFixture {
 
+    private final static Logger logger = LoggerFactory.getLogger(PathFixture.class);
+
     private static String HUG_PATH_TEMPLATE = "hugs%d/hijklmn/op/qrstuv%d/wxy/zabcd/efg%d/{param1}/op/qrstuv/wxy/zabcd/efg/hijklmn/op/qrstuv/wxy/z/{param2}";
 
 
     public static List<String> wholeListeningPath() {
         List<String> list = expectedInOutList().stream().map(e->e.getOutput()).distinct().collect(Collectors.toList());
         list.addAll(additionalListeningPaths());
-        list.addAll(additionalHugPaths(20000));
+        list.addAll(additionalHugPaths(2000));
+        logger.info("########### ready");
         return list;
     }
 
@@ -36,9 +42,14 @@ public class PathFixture {
 
         list.add(new ExpectedInOut("/products/1/promotions/2/","products/{productId}/promotions/{promotionId}"));
         list.add(new ExpectedInOut("/products/PROD_001/promotions/products/","products/{productId}/promotions/{promotionId}"));
-        list.add(new ExpectedInOut("/products/index1.html","products/{}.html"));
-        list.add(new ExpectedInOut("/index1.html","{}.html"));
-        list.add(new ExpectedInOut("/products.promotion.html","{}.html"));
+        list.add(new ExpectedInOut("/products/index1.html","products/{param}.html"));
+        list.add(new ExpectedInOut("/index1.html","{param}.html"));
+        list.add(new ExpectedInOut("/products.promotion.html","{param}.html"));
+        list.add(new ExpectedInOut("/index","{param}"));
+        list.add(new ExpectedInOut("/index1","index1"));
+        list.add(new ExpectedInOut("/index/1","{param}/1"));
+        list.add(new ExpectedInOut("/index1/1","index1/1"));
+        list.add(new ExpectedInOut("/shops/1/promotions/2/","shops/{productId}/promotions/{promotionId}"));
 
         return list;
     }

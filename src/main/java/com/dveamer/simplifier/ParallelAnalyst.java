@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 @Deprecated
 public class ParallelAnalyst extends AbstractAnalyst{

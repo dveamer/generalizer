@@ -23,7 +23,7 @@ public class SimplifierTest {
     void testSimplify() {
         Collection<ExpectedInOut> testCases = PathFixture.expectedInOutList();
         for(ExpectedInOut expectedInOut : testCases) {
-            assertThat(simplifier.simplify(expectedInOut.getInput()), equalTo(expectedInOut.getOutput()));
+            assertThat(expectedInOut.getInput(), simplifier.simplify(expectedInOut.getInput()), equalTo(expectedInOut.getOutput()));
         }
     }
 
@@ -32,7 +32,8 @@ public class SimplifierTest {
         Collection<ExpectedInOut> testCases = PathFixture.expectedInOutList();
         testCases.parallelStream()
                 .forEach(expectedInOut->{
-                    assertThat(simplifier.simplify(expectedInOut.getInput()), equalTo(expectedInOut.getOutput()));
+                    assertThat(expectedInOut.getInput(), simplifier.simplify(expectedInOut.getInput()), equalTo(expectedInOut.getOutput()));
                 });
     }
+
 }

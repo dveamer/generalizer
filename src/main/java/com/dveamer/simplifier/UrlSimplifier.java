@@ -48,7 +48,7 @@ public class UrlSimplifier implements Simplifier {
             return fullPathMap.get(searchablePath).getFullPath();
         }
 
-        logger.debug("searching.. {}", path);
+        logger.debug("searching.. {}, {}", path, searchablePath);
 
         return find(searchableWords).getFullPath();
     }
@@ -81,7 +81,11 @@ public class UrlSimplifier implements Simplifier {
     }
 
     private boolean hasNoExtension(List<String> words) {
-        return !words.get(words.size()-1).contains(Constants.SYMBOL_DOT);
+        return !hasExtension(words);
+    }
+
+    private boolean hasExtension(List<String> words) {
+        return words.get(words.size()-1).contains(Constants.SYMBOL_DOT);
     }
 
     private List<String> makeSearchableWordsWithoutExtension(List<String> words) {
@@ -91,8 +95,7 @@ public class UrlSimplifier implements Simplifier {
     }
 
     private FullPath find(List<String> searchableWords) {
-        SubPath firstSubPath = SubPath.createSubPath(searchableWords, 0);
-        FullPath fullPath = find0(searchableWords, firstSubPath);
+        FullPath fullPath = find0(searchableWords, SubPath.ZERO);
         if(fullPath!=null) {
             return fullPath;
         }
@@ -100,48 +103,62 @@ public class UrlSimplifier implements Simplifier {
         throw new NoSuchElementException("Not Found : " + searchableWords);
     }
 
-    private FullPath find(List<String> searchableWords, int index, SubPath previousSubPath) {
-        SubPath subPath = SubPath.create(searchableWords, index, previousSubPath);
-        if(subPath.isLast()) {
-            return findFullPathOfLastSubPath(subPath);
+    private FullPath find0(List<String> searchableWords, SubPath previousSubPath) {
+        SubPath subPath = SubPath.createSubPath(searchableWords, previousSubPath);
+        if(subPath.isLastNode()) {
+            return findFullPathOfLastSubPath(searchableWords, subPath);
         }
 
         if(subPathSet.contains(subPath)) {
-            return find(searchableWords, index+1, subPath);
+            return find0(searchableWords, subPath);
         }
 
         if(subPathSet.contains(subPath.variableSubPath())) {
-            return find(searchableWords, index+1, subPath.variableSubPath());
+            return find0(searchableWords, subPath.variableSubPath());
         }
+
         throw new NoSuchElementException("Not Found : " + subPath + " / " + searchableWords);
     }
 
-    private FullPath find0(List<String> searchableWords, SubPath subPath) {
-        if(subPath.isLast()) {
-            return findFullPathOfLastSubPath(subPath);
-        }
-
-        FullPath fullPath = null;
-        if(subPathSet.contains(subPath)) {
-            SubPath nextSubPath = SubPath.createSubPath(searchableWords, subPath.getIndex()+1);
-            fullPath = find0(searchableWords, nextSubPath);
-            if(fullPath!=null) {
+    private FullPath findFullPathOfLastSubPath(List<String> searchableWords, SubPath lastSubPath) {
+        if(hasExtension(searchableWords)) {
+            FullPath fullPath = findFullPathOfLastSubPathWithExtension(searchableWords, lastSubPath);
+            if(fullPath != null) {
                 return fullPath;
             }
         }
 
-        // TODO variable 처리할 때 extension 고려 필요.
-        SubPath nextSubPath = SubPath.createVariableSubPath(searchableWords, subPath.getIndex()+1);
-        return find0(searchableWords, nextSubPath);
-    }
-
-    private FullPath findFullPathOfLastSubPath(SubPath lastSubPath) {
         FullPath fullPath = lastSubPathMap.get(lastSubPath);
         if(fullPath != null) {
             return fullPath;
         }
+
         return lastSubPathMap.get(lastSubPath.variableSubPath());
     }
 
+    private FullPath findFullPathOfLastSubPathWithExtension(List<String> searchableWords, SubPath subPath) {
+        String lastWordWithExtension = searchableWords.get(searchableWords.size()-1);
+        int dotPosition = lastWordWithExtension.lastIndexOf(Constants.SYMBOL_DOT);
+        String lastWord = lastWordWithExtension.substring(0, dotPosition);
+        String extension = lastWordWithExtension.substring(dotPosition);
+
+        String variableLastWord = Constants.SYMBOL_VARIABLE;
+
+        SubPath lastSubPath = SubPath.createCustomLastSubPath(searchableWords, subPath, variableLastWord + extension);
+        FullPath fullPath = lastSubPathMap.get(lastSubPath);
+        if(fullPath!=null) {
+            return fullPath;
+        }
+
+        String variableExtension = Constants.SYMBOL_DOT + Constants.SYMBOL_VARIABLE;
+        lastSubPath = SubPath.createCustomLastSubPath(searchableWords, subPath, lastWord + variableExtension);
+        fullPath = lastSubPathMap.get(lastSubPath);
+        if(fullPath!=null) {
+            return fullPath;
+        }
+
+        lastSubPath = SubPath.createCustomLastSubPath(searchableWords, subPath, variableLastWord + variableExtension);
+        return lastSubPathMap.get(lastSubPath);
+    }
 
 }
