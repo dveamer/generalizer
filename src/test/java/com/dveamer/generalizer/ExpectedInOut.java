@@ -1,4 +1,4 @@
-package com.dveamer.simplifier;
+package com.dveamer.generalizer;
 
 public class ExpectedInOut {
 

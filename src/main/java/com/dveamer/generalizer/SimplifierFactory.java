@@ -1,4 +1,4 @@
-package com.dveamer.simplifier;
+package com.dveamer.generalizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

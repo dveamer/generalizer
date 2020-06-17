@@ -1,4 +1,4 @@
-package com.dveamer.simplifier;
+package com.dveamer.generalizer;
 
 import java.util.List;
 import java.util.Map;

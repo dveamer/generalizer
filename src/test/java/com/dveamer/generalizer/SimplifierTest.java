@@ -1,4 +1,4 @@
-package com.dveamer.simplifier;
+package com.dveamer.generalizer;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
