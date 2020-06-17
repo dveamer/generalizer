@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class UrlSimplifier implements Simplifier<String> {
+public class UrlGeneralizer implements Generalizer<String> {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -15,7 +15,7 @@ public class UrlSimplifier implements Simplifier<String> {
     private final Map<SubPath, FullPath> lastSubPathMap;
     private final Set<SubPath> subPathSet;
 
-    UrlSimplifier(Set<String> wordSet
+    UrlGeneralizer(Set<String> wordSet
             , Map<String, FullPath> fullPathMap
             , Map<SubPath, FullPath> lastSubPathMap
             , Set<SubPath> subPathSet) {

@@ -10,20 +10,20 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class SimplifierTest {
+public class GeneralizerTest {
 
-    Simplifier simplifier;
+    Generalizer generalizer;
 
     @BeforeAll
     void setup() {
-        simplifier = new SimplifierFactory().create(PathFixture.wholeListeningPath());
+        generalizer = new GeneralizerFactory().create(PathFixture.wholeListeningPath());
     }
 
     @Test
     void testSimplify() {
         Collection<ExpectedInOut> testCases = PathFixture.expectedInOutList();
         for(ExpectedInOut expectedInOut : testCases) {
-            assertThat(expectedInOut.getInput(), simplifier.simplify(expectedInOut.getInput()), equalTo(expectedInOut.getOutput()));
+            assertThat(expectedInOut.getInput(), generalizer.simplify(expectedInOut.getInput()), equalTo(expectedInOut.getOutput()));
         }
     }
 
@@ -32,7 +32,7 @@ public class SimplifierTest {
         Collection<ExpectedInOut> testCases = PathFixture.expectedInOutList();
         testCases.parallelStream()
                 .forEach(expectedInOut->{
-                    assertThat(expectedInOut.getInput(), simplifier.simplify(expectedInOut.getInput()), equalTo(expectedInOut.getOutput()));
+                    assertThat(expectedInOut.getInput(), generalizer.simplify(expectedInOut.getInput()), equalTo(expectedInOut.getOutput()));
                 });
     }
 

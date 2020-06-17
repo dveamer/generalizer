@@ -1,6 +1,6 @@
 package com.dveamer.generalizer;
 
-public interface Simplifier<T> {
+public interface Generalizer<T> {
 
     String simplify(T path);
 }
