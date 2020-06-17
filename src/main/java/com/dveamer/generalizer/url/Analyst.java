@@ -1,10 +1,10 @@
-package com.dveamer.generalizer;
+package com.dveamer.generalizer.url;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public interface Analyst {
+interface Analyst {
 
     void analysis(List<String> paths);
 

@@ -10,13 +10,13 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-public class GeneralizerTest {
+public class UrlGeneralizerTest {
 
     Generalizer generalizer;
 
     @BeforeAll
     void setup() {
-        generalizer = new GeneralizerFactory().create(PathFixture.wholeListeningPath());
+        generalizer = new GeneralizerFactory().createUrlGeneralizer(PathFixture.wholeListeningPath());
     }
 
     @Test

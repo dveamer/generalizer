@@ -1,6 +1,6 @@
-package com.dveamer.generalizer;
+package com.dveamer.generalizer.url;
 
-public class Constants {
+class Constants {
 
     static String SYMBOL_DOT = ".";
     static String SYMBOL_EMPTY = "";

@@ -1,4 +1,4 @@
-package com.dveamer.generalizer;
+package com.dveamer.generalizer.url;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public abstract class AbstractAnalyst implements Analyst{
+abstract class UrlAbstractAnalyst implements Analyst{
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -15,7 +15,7 @@ public abstract class AbstractAnalyst implements Analyst{
     final Map<SubPath, FullPath> lastPieceMap;
     final Set<SubPath> subPathSet;
 
-    AbstractAnalyst(Set<String> wordSet, Map<String, FullPath> fullPathMap, Map<SubPath, FullPath> lastPieceMap, Set<SubPath> subPathSet) {
+    UrlAbstractAnalyst(Set<String> wordSet, Map<String, FullPath> fullPathMap, Map<SubPath, FullPath> lastPieceMap, Set<SubPath> subPathSet) {
         this.wordSet = wordSet;
         this.fullPathMap = fullPathMap;
         this.lastPieceMap = lastPieceMap;

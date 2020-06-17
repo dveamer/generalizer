@@ -1,9 +1,9 @@
-package com.dveamer.generalizer;
+package com.dveamer.generalizer.url;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SubPath {
+class SubPath {
 
     private final List<String> leftWords;
     private final String word;

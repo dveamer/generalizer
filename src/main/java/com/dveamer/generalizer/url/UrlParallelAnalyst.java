@@ -1,4 +1,4 @@
-package com.dveamer.generalizer;
+package com.dveamer.generalizer.url;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,11 +7,11 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Deprecated
-public class ParallelAnalyst extends AbstractAnalyst{
+class UrlParallelAnalyst extends UrlAbstractAnalyst {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    ParallelAnalyst() {
+    UrlParallelAnalyst() {
         super(
             ConcurrentHashMap.newKeySet()
             ,new ConcurrentHashMap<>()

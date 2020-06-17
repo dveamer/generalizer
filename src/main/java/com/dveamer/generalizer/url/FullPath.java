@@ -1,10 +1,10 @@
-package com.dveamer.generalizer;
+package com.dveamer.generalizer.url;
 
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class FullPath {
+class FullPath {
 
     private final String fullPath;
     private final String searchableFullPath;

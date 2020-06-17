@@ -1,15 +1,15 @@
-package com.dveamer.generalizer;
+package com.dveamer.generalizer.url;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
-public class SingleAnalyst extends AbstractAnalyst {
+class UrlSingleAnalyst extends UrlAbstractAnalyst {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
-    SingleAnalyst() {
+    UrlSingleAnalyst() {
         super(
             new HashSet<>()
             ,new HashMap<>()
