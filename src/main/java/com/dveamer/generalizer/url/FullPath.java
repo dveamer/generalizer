@@ -46,6 +46,10 @@ class FullPath {
             sbPath.deleteCharAt(0);
         }
 
+        if(sbPath.length()==0) {
+            return Constants.SYMBOL_EMPTY;
+        }
+
         int positionOfQuery = sbPath.indexOf(Constants.SYMBOL_PATH_QUERY);
         if(positionOfQuery > -1) {
             sbPath.delete(positionOfQuery, sbPath.length());
