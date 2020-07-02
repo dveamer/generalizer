@@ -36,7 +36,7 @@ public class UrlGeneralizer implements Generalizer<String, String> {
     }
 
     @Override
-    public String simplify(String path) {
+    public String generalize(String path) {
         path = FullPath.validPath(path);
 
         if(fullPathMap.containsKey(path)) {
@@ -44,7 +44,7 @@ public class UrlGeneralizer implements Generalizer<String, String> {
         }
 
         List<String> searchableWords = makeSearchableWords(path);
-        String searchablePath = searchableWords.stream().collect(Collectors.joining(Constants.SYMBOL_PATH_DELIMITER));
+        String searchablePath = String.join(Constants.SYMBOL_PATH_DELIMITER, searchableWords);
         if(fullPathMap.containsKey(searchablePath)) {
             return fullPathMap.get(searchablePath).getFullPath();
         }

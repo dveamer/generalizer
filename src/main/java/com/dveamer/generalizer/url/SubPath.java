@@ -103,7 +103,7 @@ class SubPath {
     @Override
     public String toString() {
         return "SubPath{" +
-                "path='" + leftWords.stream().collect(Collectors.joining(Constants.SYMBOL_PATH_DELIMITER)) + Constants.SYMBOL_PATH_DELIMITER + word + '\'' +
+                "path='" + String.join(Constants.SYMBOL_PATH_DELIMITER, leftWords) + Constants.SYMBOL_PATH_DELIMITER + word + '\'' +
                 ", index=" + index +
                 ", size=" + size +
                 '}';

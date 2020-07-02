@@ -23,7 +23,7 @@ public class UrlGeneralizerTest {
     void testSimplify() {
         Collection<ExpectedInOut> testCases = PathFixture.expectedInOutList();
         for(ExpectedInOut expectedInOut : testCases) {
-            assertThat(expectedInOut.getInput(), generalizer.simplify(expectedInOut.getInput()), equalTo(expectedInOut.getOutput()));
+            assertThat(expectedInOut.getInput(), generalizer.generalize(expectedInOut.getInput()), equalTo(expectedInOut.getOutput()));
         }
     }
 
@@ -32,7 +32,7 @@ public class UrlGeneralizerTest {
         Collection<ExpectedInOut> testCases = PathFixture.expectedInOutList();
         testCases.parallelStream()
                 .forEach(expectedInOut->{
-                    assertThat(expectedInOut.getInput(), generalizer.simplify(expectedInOut.getInput()), equalTo(expectedInOut.getOutput()));
+                    assertThat(expectedInOut.getInput(), generalizer.generalize(expectedInOut.getInput()), equalTo(expectedInOut.getOutput()));
                 });
     }
 
